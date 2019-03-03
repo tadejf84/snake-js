@@ -13,18 +13,18 @@ const settings = {
 	appleX: 5, // apple initital x coordinate
 	appleY: 5, // apple initial y coordinate
 	trail: [], // snake trail
-	tail: 4, // initial snake tail length
+	tail: 4, // initial snake tail length, following the snake head
 	blockSize: 20, // block size
 	dx: 0, // player x speed
 	dy: 0 // player y speed
 };
 
 /*
-* main snake game function
+* snake game
 */
 function snake() {
 	drawCanvas();
-	setInterval(game, 50);
+	drawSnake();
 }
 
 /*
@@ -43,27 +43,48 @@ function drawSnake() {
 	settings.playerX += settings.dx;
 	settings.playerY += settings.dy;
 
-	// draw snake trail rectangle
+	// detect movement off canvas boundaries
+	if (settings.playerX < 0) {
+		settings.playerX = settings.blockSize - 1;
+	}
+	if (settings.playerX > settings.blockSize - 1) {
+		settings.playerX = 0;
+	}
+	if (settings.playerY < 0) {
+		settings.playerY = settings.blockSize - 1;
+	}
+	if (settings.playerY > settings.blockSize - 1) {
+		settings.playerY = 0;
+	}
+
+	// push player coordinates in snake tail
+	settings.trail.push({ x: settings.playerX, y: settings.playerY });
+
+	// loop through tail and draw snake
 	c.fillStyle = 'green';
-	c.fillRect(
-		settings.playerX * settings.blockSize,
-		settings.playerY * settings.blockSize,
-		settings.blockSize - 2,
-		settings.blockSize - 2
-	);
+	for (let i = 0; i < settings.trail.length; i++) {
+		c.fillRect(
+			settings.trail[i].x * settings.blockSize,
+			settings.trail[i].y * settings.blockSize,
+			settings.blockSize - 2,
+			settings.blockSize - 2
+		);
+		// detect collision and reset tail to initial
+		if (settings.trail[i].x === settings.playerX && settings.trail[i].y === settings.playerY) {
+			settings.tail = 4;
+		}
+	}
+
+	// set trail array to only maximum allowed elements of tail
+	while (settings.trail.length > settings.tail) {
+		settings.trail.shift();
+	}
 }
 
 /*
 * draw apple
 */
 function drawApple() {}
-
-/*
-* run game
-*/
-function game(settings) {
-	drawSnake(settings);
-}
 
 /*
 * key events
@@ -95,5 +116,7 @@ function keyPush(e) {
 }
 
 // listen to events
-document.addEventListener('DOMContentLoaded', snake);
+document.addEventListener('DOMContentLoaded', function() {
+	setInterval(snake, 50);
+});
 document.addEventListener('keydown', keyPush);
