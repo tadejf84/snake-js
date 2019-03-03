@@ -3,20 +3,31 @@
 */
 const canvas = document.getElementById('console');
 const c = canvas.getContext('2d');
+const scoreboard = document.getElementById('scoreboard');
+const livesCounter = document.getElementById('lives');
+const lvlCounter = document.getElementById('lvl');
+
+// game interval
+let game;
 
 /*
-* game settings
+* game settings initial
 */
 const settings = {
 	playerX: 10, // player initial x coordinate
 	playerY: 10, // player initial y coordinate
-	appleX: 5, // apple initital x coordinate
-	appleY: 5, // apple initial y coordinate
+	appleX: 14, // apple initital x coordinate
+	appleY: 3, // apple initial y coordinate
 	trail: [], // snake trail
-	tail: 4, // initial snake tail length, following the snake head
+	tail: 4, // initial snake length
 	blockSize: 20, // block size
 	dx: 0, // player x speed
-	dy: 0 // player y speed
+	dy: 0, // player y speed,
+	score: 0, // init score
+	speed: 200, // init game speed.
+	started: false, // game not started on init,
+	life: 3, // initial life,
+	level: 1
 };
 
 /*
@@ -25,6 +36,7 @@ const settings = {
 function snake() {
 	drawCanvas();
 	drawSnake();
+	drawApple();
 }
 
 /*
@@ -57,11 +69,14 @@ function drawSnake() {
 		settings.playerY = 0;
 	}
 
-	// push player coordinates in snake tail
-	settings.trail.push({ x: settings.playerX, y: settings.playerY });
-
 	// loop through tail and draw snake
 	c.fillStyle = 'green';
+	c.fillRect(
+		settings.playerX * settings.blockSize,
+		settings.playerY * settings.blockSize,
+		settings.blockSize - 2,
+		settings.blockSize - 2
+	);
 	for (let i = 0; i < settings.trail.length; i++) {
 		c.fillRect(
 			settings.trail[i].x * settings.blockSize,
@@ -69,11 +84,19 @@ function drawSnake() {
 			settings.blockSize - 2,
 			settings.blockSize - 2
 		);
-		// detect collision and reset tail to initial
-		if (settings.trail[i].x === settings.playerX && settings.trail[i].y === settings.playerY) {
+		// detect collision -> reset tail to initial, reset score
+		if (
+			settings.trail[i].x === settings.playerX &&
+			settings.trail[i].y === settings.playerY &&
+			settings.started === true
+		) {
 			settings.tail = 4;
+			resetScore();
 		}
 	}
+
+	// push player coordinates in snake trail array
+	settings.trail.push({ x: settings.playerX, y: settings.playerY });
 
 	// set trail array to only maximum allowed elements of tail
 	while (settings.trail.length > settings.tail) {
@@ -84,39 +107,80 @@ function drawSnake() {
 /*
 * draw apple
 */
-function drawApple() {}
+function drawApple() {
+	// if player position is equal to apple position, grow tail, randomly spawn new apple and add score
+	if (settings.appleX === settings.playerX && settings.appleY === settings.playerY) {
+		settings.tail++;
+		addScore();
+		settings.appleX = Math.floor(Math.random() * settings.blockSize);
+		settings.appleY = Math.floor(Math.random() * settings.blockSize);
+	}
+
+	// draw apple
+	c.fillStyle = 'red';
+	c.fillRect(
+		settings.appleX * settings.blockSize,
+		settings.appleY * settings.blockSize,
+		settings.blockSize - 2,
+		settings.blockSize - 2
+	);
+}
 
 /*
 * key events
 */
+let prevKey;
 function keyPush(e) {
-	switch (e.keyCode) {
-		// left arrow
-		case 37:
-			settings.dx = -1;
-			settings.dy = 0;
-			console.log(settings);
-			break;
-		// up arrow
-		case 38:
-			settings.dx = 0;
-			settings.dy = -1;
-			break;
-		// right arrow
-		case 39:
-			settings.dx = 1;
-			settings.dy = 0;
-			break;
-		// down arrow
-		case 40:
-			settings.dx = 0;
-			settings.dy = 1;
-			break;
+	const key = e.keyCode;
+
+	// start game
+	if (settings.started === false) {
+		settings.started = true;
+		game = setInterval(snake, settings.speed);
+	}
+
+	if (key === 37 && prevKey !== 39 && prevKey !== 37) {
+		settings.dx = -1;
+		settings.dy = 0;
+	} else if (key === 38 && prevKey !== 40 && prevKey !== 38) {
+		settings.dx = 0;
+		settings.dy = -1;
+	} else if (key === 39 && prevKey !== 37 && prevKey !== 39) {
+		settings.dx = 1;
+		settings.dy = 0;
+	} else if (key === 40 && prevKey !== 38 && prevKey !== 40) {
+		settings.dx = 0;
+		settings.dy = 1;
+	}
+	prevKey = e.keyCode;
+}
+
+/* 
+* add score
+*/
+function addScore() {
+	settings.score++;
+	scoreboard.innerText = settings.score;
+	if (settings.score % 2 === 0 && settings.speed >= 50) {
+		settings.level++;
+		lvlCounter.innerText = settings.level;
+		settings.speed = settings.speed - 15;
+		clearInterval(game);
+		game = setInterval(snake, settings.speed);
+	}
+}
+
+/*
+* reset score
+*/
+function resetScore() {
+	settings.life--;
+	livesCounter.innerText = settings.life;
+	if (settings.life < 1) {
+		clearInterval(game);
 	}
 }
 
 // listen to events
-document.addEventListener('DOMContentLoaded', function() {
-	setInterval(snake, 50);
-});
+document.addEventListener('DOMContentLoaded', snake);
 document.addEventListener('keydown', keyPush);
