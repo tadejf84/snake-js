@@ -1,0 +1,83 @@
+body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+.container {
+	max-width: 400px;
+	margin: 2rem auto;
+}
+
+.game-console-wrapper {
+	position: relative;
+}
+
+
+/*
+* lost game and intro screen
+*/
+#lost-screen, #intro-screen {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 400px;
+	width: 400px;
+	-ms-align-items: center;
+	align-items: center;
+	justify-content: center;
+}
+
+#lost-screen {
+	z-index: -1;
+	background: red;
+	display: none;
+	pointer-events: none;	
+}
+
+#intro-screen {
+	background: black;
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flex;
+	display: -o-flex;
+	display: flex;
+}
+
+#lost-screen.show {
+		display: -webkit-flex;
+		display: -moz-flex;
+		display: -ms-flex;
+		display: -o-flex;
+		display: flex;
+	pointer-events: all;
+	z-index: 2;
+}
+
+#intro-screen.hide {
+	display: none;
+	z-index: -1;
+	pointer-events: none;
+}
+
+#lost-screen .lost-screen-inner, #intro-screen .intro-screen-inner {
+	text-align: center;
+	color: #fff;
+	font-weight: 600;
+}
+
+#lost-screen .lost-screen-inner p:first-child, #intro-screen .intro-screen-inner p:first-child {
+	font-size: 2rem;
+	margin-bottom: 1rem;
+}
+
+/*
+* game control
+*/
+#game-control {
+	display: none;
+}
+
+#game-control.show {
+	display: block;
+}
