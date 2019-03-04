@@ -13,11 +13,11 @@ body {
 	position: relative;
 }
 
-
 /*
 * lost game and intro screen
 */
-#lost-screen, #intro-screen {
+#game-over-screen,
+#intro-screen {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -26,13 +26,6 @@ body {
 	-ms-align-items: center;
 	align-items: center;
 	justify-content: center;
-}
-
-#lost-screen {
-	z-index: -1;
-	background: red;
-	display: none;
-	pointer-events: none;	
 }
 
 #intro-screen {
@@ -44,12 +37,19 @@ body {
 	display: flex;
 }
 
-#lost-screen.show {
-		display: -webkit-flex;
-		display: -moz-flex;
-		display: -ms-flex;
-		display: -o-flex;
-		display: flex;
+#game-over-screen {
+	z-index: -1;
+	background: red;
+	display: none;
+	pointer-events: none;
+}
+
+#game-over-screen.show {
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flex;
+	display: -o-flex;
+	display: flex;
 	pointer-events: all;
 	z-index: 2;
 }
@@ -60,13 +60,15 @@ body {
 	pointer-events: none;
 }
 
-#lost-screen .lost-screen-inner, #intro-screen .intro-screen-inner {
+#game-over-screen .game-over-screen-inner,
+#intro-screen .intro-screen-inner {
 	text-align: center;
 	color: #fff;
 	font-weight: 600;
 }
 
-#lost-screen .lost-screen-inner p:first-child, #intro-screen .intro-screen-inner p:first-child {
+#game-over-screen .game-over-screen-inner p:first-child,
+#intro-screen .intro-screen-inner p:first-child {
 	font-size: 2rem;
 	margin-bottom: 1rem;
 }
