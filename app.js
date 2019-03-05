@@ -87,12 +87,12 @@ class Snake {
 	// draw canvas
 	drawCanvas() {
 		c.fillStyle = 'black';
-		c.fillRect(0, 0, canvas.height, canvas.width);
+		c.fillRect(0, 0, canvas.width, canvas.height);
 	}
 
 	// draw snake on canvas
 	drawSnake() {
-		// recalculate player position on key event
+		// recalculate player position on current move direction
 		this.playerX += this.dx;
 		this.playerY += this.dy;
 
@@ -118,28 +118,21 @@ class Snake {
 			this.blockSize - 2,
 			this.blockSize - 2
 		);
-		
-		this.trail.forEach( block => {
-			c.fillRect(
-				block.x * this.blockSize,
-				block.y * this.blockSize,
-				this.blockSize - 2,
-				this.blockSize - 2
-			);
-			// detect collision -> reset tail to initial, reset score
+
+		this.trail.forEach((block) => {
+			c.fillRect(block.x * this.blockSize, block.y * this.blockSize, this.blockSize - 2, this.blockSize - 2);
+			// detect collision -> end game
 			if (block.x === this.playerX && block.y === this.playerY && this.started === true) {
-				this.tail = 4;
 				SnakeUI.saveHighScore(this.actualScore);
 				SnakeUI.showGameOverScreen(this.actualScore, this.restartGame);
 			}
-			
 		});
-		
-		// push player coordinates in snake trail array
+
+		// push player coords in snake trail array
 		this.trail.push({ x: this.playerX, y: this.playerY });
 
-		// set trail array to only maximum allowed elements of tail
-		while (this.trail.length > this.tail) {
+		// set trail array length to tail length
+		while (this.trail.length >= this.tail) {
 			this.trail.shift();
 		}
 	}
@@ -153,10 +146,10 @@ class Snake {
 			this.appleX = Math.floor(Math.random() * this.blockSize);
 			this.appleY = Math.floor(Math.random() * this.blockSize);
 			// check if apple position on snake, if so generate new
-			this.trail.forEach( block => {
-				if(block.x === this.appleX && block.y === this.appleY) {
+			this.trail.forEach((block) => {
+				if (block.x === this.appleX && block.y === this.appleY) {
 					this.appleX = Math.floor(Math.random() * this.blockSize);
-					this.appleY = Math.floor(Math.random() * this.blockSize);	
+					this.appleY = Math.floor(Math.random() * this.blockSize);
 				}
 			});
 		}
@@ -220,7 +213,6 @@ class Snake {
 			this.dy = 1;
 		}
 	}
-	
 }
 
 /*
@@ -249,8 +241,8 @@ class SnakeUI {
 	// save high score to local storage
 	static saveHighScore(score) {
 		let storedHighScore = JSON.parse(localStorage.getItem('highScore'));
-		if(score > storedHighScore) {
-			localStorage.setItem('highScore', JSON.stringify(score));	
+		if (score > storedHighScore) {
+			localStorage.setItem('highScore', JSON.stringify(score));
 		}
 	}
 
@@ -289,7 +281,7 @@ class SnakeUI {
 * instantiate the game
 */
 const settings = {
-	tail: 4, // set initial snake length
+	tail: 5, // set initial snake length
 	speed: 200, // set initial game speed,
 	speedIncrement: 15 // set speed increments by level
 };
@@ -305,6 +297,7 @@ btnStart.addEventListener('click', function() {
 		snakeGame.moveSnakeOnKeyPush(e);
 	});
 });
+
 btnRestart.addEventListener('click', function() {
 	snakeGame.restartGame();
 	SnakeUI.hideGameOverScreen();
