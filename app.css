@@ -76,10 +76,23 @@ body {
 /*
 * game control
 */
-#game-control {
+#game-display {
 	display: none;
 }
 
-#game-control.show {
+#game-display.show {
 	display: block;
+}
+
+#game-display .current-game {
+	margin: 8px 0;
+}
+
+#game-display p {
+	font-size: 1.3rem;
+	margin: 0;
+}
+
+#game-display .current-game p:first-of-type {
+	float: right;
 }

@@ -11,7 +11,7 @@ const currentScore = document.getElementById('current-score');
 const finalScore = document.getElementById('final-score');
 const highScore = document.getElementById('high-score');
 const currentLvl = document.getElementById('current-lvl');
-const gameControl = document.getElementById('game-control');
+const gameDisplay = document.getElementById('game-display');
 
 /*
 * class timer - to control the speed of the game
@@ -68,6 +68,7 @@ class Snake {
 		this.dx = 0; // player x speed
 		this.dy = 0; // player y speed
 		this.score = 0; // initial score
+		this.actualScore = 0; // initial actual score - levels considered in calculation
 		this.started = false; // game not started on init
 		this.level = 1; // initial lvl
 		this.timer = new Timer(() => {
@@ -89,6 +90,7 @@ class Snake {
 		c.fillRect(0, 0, canvas.height, canvas.width);
 	}
 
+	// draw snake on canvas
 	drawSnake() {
 		// recalculate player position on key event
 		this.playerX += this.dx;
@@ -116,21 +118,23 @@ class Snake {
 			this.blockSize - 2,
 			this.blockSize - 2
 		);
-		for (let i = 0; i < this.trail.length; i++) {
+		
+		this.trail.forEach( block => {
 			c.fillRect(
-				this.trail[i].x * this.blockSize,
-				this.trail[i].y * this.blockSize,
+				block.x * this.blockSize,
+				block.y * this.blockSize,
 				this.blockSize - 2,
 				this.blockSize - 2
 			);
 			// detect collision -> reset tail to initial, reset score
-			if (this.trail[i].x === this.playerX && this.trail[i].y === this.playerY && this.started === true) {
+			if (block.x === this.playerX && block.y === this.playerY && this.started === true) {
 				this.tail = 4;
-				SnakeUI.saveHighScore(this.score);
-				SnakeUI.showGameOverScreen(this.score, this.restartGame);
+				SnakeUI.saveHighScore(this.actualScore);
+				SnakeUI.showGameOverScreen(this.actualScore, this.restartGame);
 			}
-		}
-
+			
+		});
+		
 		// push player coordinates in snake trail array
 		this.trail.push({ x: this.playerX, y: this.playerY });
 
@@ -140,7 +144,7 @@ class Snake {
 		}
 	}
 
-	// draw apple
+	// draw apple on canvas
 	drawApple() {
 		// if player position is equal to apple position, grow tail, randomly spawn new apple and add score
 		if (this.appleX === this.playerX && this.appleY === this.playerY) {
@@ -148,6 +152,13 @@ class Snake {
 			this.addScore();
 			this.appleX = Math.floor(Math.random() * this.blockSize);
 			this.appleY = Math.floor(Math.random() * this.blockSize);
+			// check if apple position on snake, if so generate new
+			this.trail.forEach( block => {
+				if(block.x === this.appleX && block.y === this.appleY) {
+					this.appleX = Math.floor(Math.random() * this.blockSize);
+					this.appleY = Math.floor(Math.random() * this.blockSize);	
+				}
+			});
 		}
 
 		// draw apple
@@ -155,18 +166,20 @@ class Snake {
 		c.fillRect(this.appleX * this.blockSize, this.appleY * this.blockSize, this.blockSize - 2, this.blockSize - 2);
 	}
 
-	// add score
+	// add score - increase score increment for each level
 	addScore() {
 		this.score++;
-		SnakeUI.updateScore(this.score);
-		if (this.score % 2 === 0 && this.speed >= 50) {
+		this.actualScore += this.level;
+		SnakeUI.updateScore(this.actualScore);
+		if (this.score % 5 === 0 && this.speed >= 50) {
 			this.level++;
 			SnakeUI.updateLvl(this.level);
-			this.speed = this.speed - 15;
+			this.speed = this.speed - this.speedIncrement;
 			this.timer.reset(this.speed);
 		}
 	}
 
+	// restart game - reset settings to initial, reset speed, update display and init game
 	restartGame() {
 		this.playerX = 10;
 		this.playerY = 10;
@@ -177,20 +190,22 @@ class Snake {
 		this.dx = 0;
 		this.dy = 0;
 		this.score = 0;
+		this.actualScore = 0;
 		this.speed = settings.speed;
 		this.started = false;
 		this.level = 1;
+		SnakeUI.updateLvl(this.level);
+		SnakeUI.updateScore(this.actualScore);
 		this.timer.reset(settings.speed);
+		this.init();
 	}
 
-	keyPush(e) {
+	// move snake on key push events
+	moveSnakeOnKeyPush(e) {
 		const key = e.keyCode;
-
-		// start game
 		if (this.started === false) {
-			this.started = true;
+			this.started = true; // start game
 		}
-
 		if (key === 37 && this.dx !== -1 && this.dx !== 1) {
 			this.dx = -1;
 			this.dy = 0;
@@ -205,6 +220,7 @@ class Snake {
 			this.dy = 1;
 		}
 	}
+	
 }
 
 /*
@@ -216,7 +232,7 @@ class SnakeUI {
 		currentScore.innerText = 0;
 		currentLvl.innerText = 1;
 		introScreen.classList.add('hide');
-		gameControl.classList.add('show');
+		gameDisplay.classList.add('show');
 		SnakeUI.getHighScore();
 	}
 
@@ -232,28 +248,29 @@ class SnakeUI {
 
 	// save high score to local storage
 	static saveHighScore(score) {
-		localStorage.setItem('highScore', JSON.stringify(score));
+		let storedHighScore = JSON.parse(localStorage.getItem('highScore'));
+		if(score > storedHighScore) {
+			localStorage.setItem('highScore', JSON.stringify(score));	
+		}
 	}
 
-	// fetch high score from local storage and update
+	// fetch high score from local storage and update display
 	static getHighScore() {
 		let storedHigh;
 		if (!localStorage.getItem('highScore')) {
 			storedHigh = 0;
 		} else {
 			storedHigh = JSON.parse(localStorage.getItem('highScore'));
-			console.log(storedHigh);
 		}
 		highScore.innerText = storedHigh;
 	}
 
 	// show end game screen with final score
-	static showGameOverScreen(score, fn) {
+	static showGameOverScreen(score) {
 		if (!gameOverScreen.classList.contains('show')) {
 			gameOverScreen.classList.add('show');
-			gameControl.classList.remove('show');
+			gameDisplay.classList.remove('show');
 			finalScore.innerText = score;
-			fn();
 		}
 	}
 
@@ -262,13 +279,15 @@ class SnakeUI {
 		if (gameOverScreen.classList.contains('show')) {
 			gameOverScreen.classList.remove('show');
 			finalScore.innerText = 0;
-			gameControl.classList.add('show');
+			gameDisplay.classList.add('show');
 		}
 		SnakeUI.getHighScore();
 	}
 }
 
-// instantiate the game
+/*
+* instantiate the game
+*/
 const settings = {
 	tail: 4, // set initial snake length
 	speed: 200, // set initial game speed,
@@ -283,7 +302,7 @@ btnStart.addEventListener('click', function() {
 	snakeGame.init();
 	SnakeUI.hideIntroScreen();
 	document.addEventListener('keydown', function(e) {
-		snakeGame.keyPush(e);
+		snakeGame.moveSnakeOnKeyPush(e);
 	});
 });
 btnRestart.addEventListener('click', function() {
