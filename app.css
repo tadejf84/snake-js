@@ -39,7 +39,7 @@ body {
 
 #game-over-screen {
 	z-index: -1;
-	background: red;
+	background: #e50000;
 	display: none;
 	pointer-events: none;
 }
