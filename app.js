@@ -147,7 +147,7 @@ class Snake {
 			this.appleY = Math.floor(Math.random() * this.blockSize);
 			// check if apple position on snake, if so generate new
 			this.trail.forEach((block) => {
-				if (block.x === this.appleX && block.y === this.appleY) {
+				while (block.x === this.appleX && block.y === this.appleY) {
 					this.appleX = Math.floor(Math.random() * this.blockSize);
 					this.appleY = Math.floor(Math.random() * this.blockSize);
 				}
