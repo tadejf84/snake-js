@@ -131,8 +131,8 @@ class Snake {
 		this.playerX += this.dx;
 		this.playerY += this.dy;
 
-		// Detect movement off canvas boundaries
-		this.detectCanvasBoundaries();
+		// Detect movement off gameboard boundaries
+		this.detectGameboardBoundaries();
 
 		// Loop through trail and draw snake
 		ctx.fillStyle = 'green';
@@ -166,12 +166,14 @@ class Snake {
 	 * 
 	 */
 	drawApple() {
+		
 		// If player position is equal to apple position, grow tail, randomly spawn new apple and add score
 		if (this.appleX === this.playerX && this.appleY === this.playerY) {
 			this.tail++;
 			this.addScore();
 			this.appleX = Math.floor(Math.random() * this.blockSize);
 			this.appleY = Math.floor(Math.random() * this.blockSize);
+
 			// Check if apple position on snake, if so generate new
 			this.trail.forEach((block) => {
 				while (block.x === this.appleX && block.y === this.appleY) {
@@ -201,7 +203,6 @@ class Snake {
 			this.timer.reset(this.speed);
 		}
 	}
-
 
 	/**
 	 * Restart game logic
@@ -257,7 +258,7 @@ class Snake {
 	 * Detect if outside canvas
 	 * 
 	 */
-	detectCanvasBoundaries() {
+	detectGameboardBoundaries() {
 		if (this.playerX < 0) this.playerX = this.blockSize - 1;
 		if (this.playerX > this.blockSize - 1) this.playerX = 0;
 		if (this.playerY < 0) this.playerY = this.blockSize - 1;
@@ -340,7 +341,6 @@ class SnakeUI {
 		}
 		finalScore.innerText = score;
 	}
-
 }
 
 // Instantiate the game
