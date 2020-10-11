@@ -19,30 +19,30 @@ const gameDisplay = document.getElementById('game-display');
  */
 class Timer {
 
-	/**
-	 * @constructor
-	 * 
-	 * @callback fn
-	 * @param {number} speed 
-	 */
-	constructor(fn, speed) {
-		this.speed = speed;
-		this.fn = fn;
-		this.timerObj = setInterval(this.fn, this.speed);
-	}
+    /**
+     * @constructor
+     * 
+     * @callback fn
+     * @param {number} speed 
+     */
+    constructor(fn, speed) {
+        this.speed = speed;
+        this.fn = fn;
+        this.timerObj = setInterval(this.fn, this.speed);
+    }
 
-	/**
-	 * Stop interval
-	 * 
-	 * @return {object}
-	 */
-	stop() {
-		if (this.timerObj) {
-			clearInterval(this.timerObj);
-			this.timerObj = null;
-		}
-		return this;
-	}
+    /**
+     * Stop interval
+     * 
+     * @return {object}
+     */
+    stop() {
+        if (this.timerObj) {
+            clearInterval(this.timerObj);
+            this.timerObj = null;
+        }
+        return this;
+    }
 
 	/**
 	 * Restart the interval with old speed settings
