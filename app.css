@@ -1,98 +1,94 @@
 body {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 .container {
-	max-width: 400px;
-	margin: 2rem auto;
+    max-width: 400px;
+    margin: 2rem auto;
 }
 
 .game-console-wrapper {
-	position: relative;
+    position: relative;
 }
 
-/*
-* lost game and intro screen
-*/
+/* Game over and intro screen */
 #game-over-screen,
 #intro-screen {
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 400px;
-	width: 400px;
-	-ms-align-items: center;
-	align-items: center;
-	justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 400px;
+    width: 400px;
+    -ms-align-items: center;
+    align-items: center;
+    justify-content: center;
 }
 
 #intro-screen {
-	background: black;
-	display: -webkit-flex;
-	display: -moz-flex;
-	display: -ms-flex;
-	display: -o-flex;
-	display: flex;
+    background: black;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: flex;
 }
 
 #game-over-screen {
-	z-index: -1;
-	background: #e50000;
-	display: none;
-	pointer-events: none;
+    z-index: -1;
+    background: #e50000;
+    display: none;
+    pointer-events: none;
 }
 
 #game-over-screen.show {
-	display: -webkit-flex;
-	display: -moz-flex;
-	display: -ms-flex;
-	display: -o-flex;
-	display: flex;
-	pointer-events: all;
-	z-index: 2;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: flex;
+    pointer-events: all;
+    z-index: 2;
 }
 
 #intro-screen.hide {
-	display: none;
-	z-index: -1;
-	pointer-events: none;
+    display: none;
+    z-index: -1;
+    pointer-events: none;
 }
 
 #game-over-screen .game-over-screen-inner,
 #intro-screen .intro-screen-inner {
-	text-align: center;
-	color: #fff;
-	font-weight: 600;
+    text-align: center;
+    color: #fff;
+    font-weight: 600;
 }
 
 #game-over-screen .game-over-screen-inner p:first-child,
 #intro-screen .intro-screen-inner p:first-child {
-	font-size: 2rem;
-	margin-bottom: 1rem;
+    font-size: 2rem;
+    margin-bottom: 1rem;
 }
 
-/*
-* game control
-*/
+/* Game control */
 #game-display {
-	display: none;
+    display: none;
 }
 
 #game-display.show {
-	display: block;
+    display: block;
 }
 
 #game-display .current-game {
-	margin: 8px 0;
+    margin: 8px 0;
 }
 
 #game-display p {
-	font-size: 1.3rem;
-	margin: 0;
+    font-size: 1.3rem;
+    margin: 0;
 }
 
 #game-display .current-game p:first-of-type {
-	float: right;
+    float: right;
 }
