@@ -352,23 +352,23 @@ class SnakeUI {
 
 // Instantiate the game
 const settings = {
-	tail: 5, // set initial snake length
-	speed: 200, // set initial game speed
-	speedIncrement: 15 // set speed increments by level
+    tail: 5, // set initial snake length
+    speed: 200, // set initial game speed
+    speedIncrement: 15 // set speed increments by level
 };
 const snakeGame = new Snake(settings);
 
 
 // Event listeners
 btnStart.addEventListener('click', function() {
-	snakeGame.init();
-	SnakeUI.hideIntroScreen();
-	document.addEventListener('keydown', function(e) {
-		snakeGame.moveSnakeOnKeyPush(e);
-	});
+    snakeGame.init();
+    SnakeUI.hideIntroScreen();
+    document.addEventListener('keydown', function(e) {
+        snakeGame.moveSnakeOnKeyPush(e);
+    });
 });
 
 btnRestart.addEventListener('click', function() {
-	snakeGame.restartGame(settings);
-	SnakeUI.showHideGameOverScreen();
+    snakeGame.restartGame(settings);
+    SnakeUI.showHideGameOverScreen();
 });
