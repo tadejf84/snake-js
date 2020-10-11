@@ -44,29 +44,29 @@ class Timer {
         return this;
     }
 
-	/**
-	 * Restart the interval with old speed settings
-	 * 
-	 * @return {object}
-	 */
-	start() {
-		if (!this.timerObj) {
-			this.stop();
-			this.timerObj = setInterval(this.fn, this.speed);
-		}
-		return this;
-	}
+    /**
+     * Restart the interval with old speed settings
+     * 
+     * @return {object}
+     */
+    start() {
+        if (!this.timerObj) {
+            this.stop();
+            this.timerObj = setInterval(this.fn, this.speed);
+        }
+        return this;
+    }
 
-	/**
-	 * Stop and reset to new interval speed
-	 * 
-	 * @param {number} newSpeed 
-	 * @return {object}
-	 */
-	reset(newSpeed) {
-		this.speed = newSpeed;
-		return this.stop().start();
-	}
+    /**
+     * Stop and reset to new interval speed
+     * 
+     * @param {number} newSpeed 
+     * @return {object}
+     */
+    reset(newSpeed) {
+        this.speed = newSpeed;
+        return this.stop().start();
+    }
 }
 
 
@@ -75,50 +75,56 @@ class Timer {
  * 
  */
 class Snake {
-	constructor(settings) {
 
-		// User settings
-		this.speed = settings.speed; // initial game speed
-		this.tail = settings.tail; // initial snake length
-		this.speedIncrement = settings.speedIncrement; // speed increment
+    /**
+     * @constructor
+     * 
+     * @param {object} settings 
+     */
+    constructor(settings) {
 
-		// Game settings
-		this.playerX = 10; // player initial x coordinate
-		this.playerY = 10; // player initial y coordinate
-		this.blockSize = 20; // block size
-		this.appleX = Math.floor(Math.random() * this.blockSize); // spawn initial apple randomly - x coordinate
-		this.appleY = Math.floor(Math.random() * this.blockSize); // spawn initial apple randomly - Y coordinate
-		this.trail = []; // snake trail
-		this.dx = 0; // player x speed
-		this.dy = 0; // player y speed
-		this.score = 0; // initial score
-		this.actualScore = 0; // initial actual score - levels considered in calculation
-		this.started = false; // game not started on init
-		this.level = 1; // initial lvl
-		this.timer = new Timer(() => {
-			this.init();
-		}, this.speed);
-	}
+        // User settings
+        this.speed = settings.speed; // initial game speed
+        this.tail = settings.tail; // initial snake length
+        this.speedIncrement = settings.speedIncrement; // speed increment
 
-	/**
-	 * Init game
-	 * 
-	 */
-	init() {
-		this.drawCanvas();
-		this.drawSnake();
-		this.drawApple();
-		this.timer.start();
-	}
+        // Game settings
+        this.playerX = 10; // player initial x coordinate
+        this.playerY = 10; // player initial y coordinate
+        this.blockSize = 20; // block size
+        this.appleX = Math.floor(Math.random() * this.blockSize); // spawn initial apple randomly - x coordinate
+        this.appleY = Math.floor(Math.random() * this.blockSize); // spawn initial apple randomly - Y coordinate
+        this.trail = []; // snake trail
+        this.dx = 0; // player x speed
+        this.dy = 0; // player y speed
+        this.score = 0; // initial score
+        this.actualScore = 0; // initial actual score - levels considered in calculation
+        this.started = false; // game not started on init
+        this.level = 1; // initial lvl
+        this.timer = new Timer(() => {
+            this.init();
+        }, this.speed);
+    }
 
-	/**
-	 * Draw game canvas
-	 * 
-	 */
-	drawCanvas() {
-		ctx.fillStyle = 'black';
-		ctx.fillRect(0, 0, canvas.width, canvas.height);
-	}
+    /**
+     * Init game
+     * 
+     */
+    init() {
+        this.drawCanvas();
+        this.drawSnake();
+        this.drawApple();
+        this.timer.start();
+    }
+
+    /**
+     * Draw game canvas
+     * 
+     */
+    drawCanvas() {
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
 
 	/**
 	 * Draw snake on canvas
