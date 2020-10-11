@@ -126,10 +126,10 @@ class Snake {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-	/**
-	 * Draw snake on canvas
-	 * 
-	 */
+    /**
+     * Draw snake on canvas
+     * 
+     */
     drawSnake() {
 
         // Recalculate player position on current move direction
