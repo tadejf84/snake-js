@@ -278,75 +278,75 @@ class Snake {
  */
 class SnakeUI {
 
-	/**
-	 * Hide intro screen and set initial score and lvl
-	 * 
-	 */
-	static hideIntroScreen() {
-		currentScore.innerText = 0;
-		currentLvl.innerText = 1;
-		introScreen.classList.add('hide');
-		gameDisplay.classList.add('show');
-		SnakeUI.getHighScore();
-	}
+    /**
+     * Hide intro screen and set initial score and lvl
+     * 
+     */
+    static hideIntroScreen() {
+        currentScore.innerText = 0;
+        currentLvl.innerText = 1;
+        introScreen.classList.add('hide');
+        gameDisplay.classList.add('show');
+        SnakeUI.getHighScore();
+    }
 
-	/**
-	 * Update current score
-	 * 
-	 * @param {number} score 
-	 */
-	static updateScore(score) {
-		currentScore.innerText = score;
-	}
+    /**
+     * Update current score
+     * 
+     * @param {number} score 
+     */
+    static updateScore(score) {
+        currentScore.innerText = score;
+    }
 
-	/**
-	 * Update current level
-	 * 
-	 * @param {number} lvl 
-	 */
-	static updateLvl(lvl) {
-		currentLvl.innerText = lvl;
-	}
+    /**
+     * Update current level
+     * 
+     * @param {number} lvl 
+     */
+    static updateLvl(lvl) {
+        currentLvl.innerText = lvl;
+    }
 
-	/**
-	 * Save high score to local storage
-	 * 
-	 * @param {number} score 
-	 */
-	static saveHighScore(score) {
-		const storedHighScore = JSON.parse(localStorage.getItem('highScore'));
-		if (score > storedHighScore) {
-			localStorage.setItem('highScore', JSON.stringify(score));
-		}
-	}
+    /**
+     * Save high score to local storage
+     * 
+     * @param {number} score 
+     */
+    static saveHighScore(score) {
+        const storedHighScore = JSON.parse(localStorage.getItem('highScore'));
+        if (score > storedHighScore) {
+            localStorage.setItem('highScore', JSON.stringify(score));
+        }
+    }
 
-	/**
-	 * Get high score from local storage and update UI display
-	 * 
-	 */
-	static getHighScore() {
-		let storedHigh;
-		if (!localStorage.getItem('highScore')) {
-			storedHigh = 0;
-		} else {
-			storedHigh = JSON.parse(localStorage.getItem('highScore'));
-		}
-		highScore.innerText = storedHigh;
-	}
+    /**
+     * Get high score from local storage and update UI display
+     * 
+     */
+    static getHighScore() {
+        let storedHigh;
+        if (!localStorage.getItem('highScore')) {
+            storedHigh = 0;
+        } else {
+            storedHigh = JSON.parse(localStorage.getItem('highScore'));
+        }
+        highScore.innerText = storedHigh;
+    }
 
-	/**
-	 * Show/hide end game screen
-	 * 
-	 * @param {number} score 
-	 */
-	static showHideGameOverScreen(score = 0) {
-		if (!gameOverScreen.classList.contains('show')) {
-			gameOverScreen.classList.add('show');
-		} else {
-			gameOverScreen.classList.remove('show');
-		}
-		finalScore.innerText = score;
-	}
+    /**
+     * Show/hide end game screen
+     * 
+     * @param {number} score 
+     */
+    static showHideGameOverScreen(score = 0) {
+        if (!gameOverScreen.classList.contains('show')) {
+            gameOverScreen.classList.add('show');
+        } else {
+            gameOverScreen.classList.remove('show');
+        }
+        finalScore.innerText = score;
+    }
 }
 
 
