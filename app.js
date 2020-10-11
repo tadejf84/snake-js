@@ -265,6 +265,7 @@ class Snake {
 	}
 }
 
+
 /**
  * Snake UI Class
  * 
@@ -342,6 +343,7 @@ class SnakeUI {
 	}
 }
 
+
 // Instantiate the game
 const settings = {
 	tail: 5, // set initial snake length
@@ -349,6 +351,7 @@ const settings = {
 	speedIncrement: 15 // set speed increments by level
 };
 const snakeGame = new Snake(settings);
+
 
 // Event listeners
 btnStart.addEventListener('click', function() {
