@@ -130,145 +130,145 @@ class Snake {
 	 * Draw snake on canvas
 	 * 
 	 */
-	drawSnake() {
+    drawSnake() {
 
-		// Recalculate player position on current move direction
-		this.playerX += this.dx;
-		this.playerY += this.dy;
+        // Recalculate player position on current move direction
+        this.playerX += this.dx;
+        this.playerY += this.dy;
 
-		// Detect movement off gameboard boundaries
-		this.detectGameboardBoundaries();
+        // Detect movement off gameboard boundaries
+        this.detectGameboardBoundaries();
 
-		// Loop through trail and draw snake
-		ctx.fillStyle = 'green';
-		ctx.fillRect(
-			this.playerX * this.blockSize,
-			this.playerY * this.blockSize,
-			this.blockSize - 2,
-			this.blockSize - 2
-		);
+        // Loop through trail and draw snake
+        ctx.fillStyle = 'green';
+        ctx.fillRect(
+            this.playerX * this.blockSize,
+            this.playerY * this.blockSize,
+            this.blockSize - 2,
+            this.blockSize - 2
+        );
 
-		this.trail.forEach((block) => {
-			ctx.fillRect(block.x * this.blockSize, block.y * this.blockSize, this.blockSize - 2, this.blockSize - 2);
-			// Detect collision -> end game
-			if (block.x === this.playerX && block.y === this.playerY && this.started === true) {
-				SnakeUI.saveHighScore(this.actualScore);
-				SnakeUI.showHideGameOverScreen(this.actualScore);
-			}
-		});
+        this.trail.forEach((block) => {
+            ctx.fillRect(block.x * this.blockSize, block.y * this.blockSize, this.blockSize - 2, this.blockSize - 2);
+            // Detect collision -> end game
+            if (block.x === this.playerX && block.y === this.playerY && this.started === true) {
+                SnakeUI.saveHighScore(this.actualScore);
+                SnakeUI.showHideGameOverScreen(this.actualScore);
+            }
+        });
 
-		// Push player coords in snake trail array
-		this.trail.push({ x: this.playerX, y: this.playerY });
+        // Push player coords in snake trail array
+        this.trail.push({ x: this.playerX, y: this.playerY });
 
-		// Set trail array length to tail length
-		while (this.trail.length >= this.tail) {
-			this.trail.shift();
-		}
-	}
+        // Set trail array length to tail length
+        while (this.trail.length >= this.tail) {
+            this.trail.shift();
+        }
+    }
 
-	/**
-	 * Draw apples on canvas
-	 * 
-	 */
-	drawApple() {
-		
-		// If player position is equal to apple position, grow tail, randomly spawn new apple and add score
-		if (this.appleX === this.playerX && this.appleY === this.playerY) {
-			this.tail++;
-			this.addScore();
-			this.appleX = Math.floor(Math.random() * this.blockSize);
-			this.appleY = Math.floor(Math.random() * this.blockSize);
+    /**
+     * Draw apples on canvas
+     * 
+     */
+    drawApple() {
+        
+        // If player position is equal to apple position, grow tail, randomly spawn new apple and add score
+        if (this.appleX === this.playerX && this.appleY === this.playerY) {
+            this.tail++;
+            this.addScore();
+            this.appleX = Math.floor(Math.random() * this.blockSize);
+            this.appleY = Math.floor(Math.random() * this.blockSize);
 
-			// Check if apple position on snake, if so generate new
-			this.trail.forEach((block) => {
-				while (block.x === this.appleX && block.y === this.appleY) {
-					this.appleX = Math.floor(Math.random() * this.blockSize);
-					this.appleY = Math.floor(Math.random() * this.blockSize);
-				}
-			});
-		}
+            // Check if apple position on snake, if so generate new
+            this.trail.forEach((block) => {
+                while (block.x === this.appleX && block.y === this.appleY) {
+                    this.appleX = Math.floor(Math.random() * this.blockSize);
+                    this.appleY = Math.floor(Math.random() * this.blockSize);
+                }
+            });
+        }
 
-		// Draw apple
-		ctx.fillStyle = 'red';
-		ctx.fillRect(this.appleX * this.blockSize, this.appleY * this.blockSize, this.blockSize - 2, this.blockSize - 2);
-	}
+        // Draw apple
+        ctx.fillStyle = 'red';
+        ctx.fillRect(this.appleX * this.blockSize, this.appleY * this.blockSize, this.blockSize - 2, this.blockSize - 2);
+    }
 
-	/**
-	 * Add score logic
-	 * 
-	 */
-	addScore() {
-		this.score++;
-		this.actualScore += this.level;
-		SnakeUI.updateScore(this.actualScore);
-		if (this.score % 5 === 0 && this.speed >= 50) {
-			this.level++;
-			SnakeUI.updateLvl(this.level);
-			this.speed = this.speed - this.speedIncrement;
-			this.timer.reset(this.speed);
-		}
-	}
+    /**
+     * Add score logic
+     * 
+     */
+    addScore() {
+        this.score++;
+        this.actualScore += this.level;
+        SnakeUI.updateScore(this.actualScore);
+        if (this.score % 5 === 0 && this.speed >= 50) {
+            this.level++;
+            SnakeUI.updateLvl(this.level);
+            this.speed = this.speed - this.speedIncrement;
+            this.timer.reset(this.speed);
+        }
+    }
 
-	/**
-	 * Restart game logic
-	 * 
-	 * @param {object} settings 
-	 */
-	restartGame(settings) {
-		this.playerX = 10;
-		this.playerY = 10;
-		this.drawApple();
-		this.trail = [];
-		this.tail = settings.tail;
-		this.dx = 0;
-		this.dy = 0;
-		this.score = 0;
-		this.actualScore = 0;
-		this.speed = settings.speed;
-		this.started = false;
-		this.level = 1;
-		SnakeUI.updateLvl(this.level);
-		SnakeUI.updateScore(this.actualScore);
-		SnakeUI.getHighScore();
-		this.timer.reset(settings.speed);
-		this.init();
-	}
+    /**
+     * Restart game logic
+     * 
+     * @param {object} settings 
+     */
+    restartGame(settings) {
+        this.playerX = 10;
+        this.playerY = 10;
+        this.drawApple();
+        this.trail = [];
+        this.tail = settings.tail;
+        this.dx = 0;
+        this.dy = 0;
+        this.score = 0;
+        this.actualScore = 0;
+        this.speed = settings.speed;
+        this.started = false;
+        this.level = 1;
+        SnakeUI.updateLvl(this.level);
+        SnakeUI.updateScore(this.actualScore);
+        SnakeUI.getHighScore();
+        this.timer.reset(settings.speed);
+        this.init();
+    }
 
-	/**
-	 * Move snake on key push event
-	 * 
-	 * @param {object} e 
-	 */
-	moveSnakeOnKeyPush(e) {
-		const key = e.keyCode;
-		if (this.started === false) {
-			this.started = true; // start game
-		}
-		if (key === 37 && this.dx !== -1 && this.dx !== 1) {
-			this.dx = -1;
-			this.dy = 0;
-		} else if (key === 38 && this.dy !== -1 && this.dy !== 1) {
-			this.dx = 0;
-			this.dy = -1;
-		} else if (key === 39 && this.dx !== -1 && this.dx !== 1) {
-			this.dx = 1;
-			this.dy = 0;
-		} else if (key === 40 && this.dy !== -1 && this.dy !== 1) {
-			this.dx = 0;
-			this.dy = 1;
-		}
-	}
+    /**
+     * Move snake on key push event
+     * 
+     * @param {object} e 
+     */
+    moveSnakeOnKeyPush(e) {
+        const key = e.keyCode;
+        if (this.started === false) {
+            this.started = true; // start game
+        }
+        if (key === 37 && this.dx !== -1 && this.dx !== 1) {
+            this.dx = -1;
+            this.dy = 0;
+        } else if (key === 38 && this.dy !== -1 && this.dy !== 1) {
+            this.dx = 0;
+            this.dy = -1;
+        } else if (key === 39 && this.dx !== -1 && this.dx !== 1) {
+            this.dx = 1;
+            this.dy = 0;
+        } else if (key === 40 && this.dy !== -1 && this.dy !== 1) {
+            this.dx = 0;
+            this.dy = 1;
+        }
+    }
 
-	/**
-	 * Detect if outside canvas
-	 * 
-	 */
-	detectGameboardBoundaries() {
-		if (this.playerX < 0) this.playerX = this.blockSize - 1;
-		if (this.playerX > this.blockSize - 1) this.playerX = 0;
-		if (this.playerY < 0) this.playerY = this.blockSize - 1;
-		if (this.playerY > this.blockSize - 1) this.playerY = 0;
-	}
+    /**
+     * Detect if outside canvas
+     * 
+     */
+    detectGameboardBoundaries() {
+        if (this.playerX < 0) this.playerX = this.blockSize - 1;
+        if (this.playerX > this.blockSize - 1) this.playerX = 0;
+        if (this.playerY < 0) this.playerY = this.blockSize - 1;
+        if (this.playerY > this.blockSize - 1) this.playerY = 0;
+    }
 }
 
 
