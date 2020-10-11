@@ -1,6 +1,4 @@
-/*
-* DOM caching
-*/
+// DOM Caching
 const canvas = document.getElementById('console');
 const ctx = canvas.getContext('2d');
 const btnStart = document.getElementById('btn-start');
@@ -15,8 +13,8 @@ const gameDisplay = document.getElementById('game-display');
 
 
 /**
- *	Class Timer
- *	Control the speed of the game 	
+ * Class Timer
+ * Control the speed of the game 	
  * 
  */
 class Timer {
@@ -71,8 +69,9 @@ class Timer {
 	}
 }
 
+
 /**
- *	Class Snake 	
+ * Class Snake 	
  * 
  */
 class Snake {
